@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" {% if session.get('dark_mode') %}class="dark-mode"{% endif %}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pet Kingdom – Cinematic Edition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- EXTREME HERO WITH NAVBAR -->
+<section id="home" class="hero-extreme">
+  <video autoplay muted loop playsinline class="hero-video" loading="lazy" id="petVideo" poster="https://images.unsplash.com/photo-1583511655826-05700d52f4d9?auto=format&fit=crop&w=1600&q=80">
+    <source src="https://cdn.pixabay.com/video/2018/03/31/15305-262921865_large.mp4" type="video/mp4">
+  </video>
+
+  <div class="video-overlay"></div>
+  <div class="noise-overlay"></div>
+  <canvas id="particleCanvas"></canvas>
+
+  <header class="navbar-on-video">
+    <div class="container nav-container">
+      <a href="{{ url_for('home') }}" class="logo"><i class="fas fa-crown"></i> Pet Kingdom</a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="nav-item">Home</a>
+        <a href="#about" class="nav-item">About</a>
+        <a href="#testimonials" class="nav-item">Testimonials</a>
+        <a href="#shop" class="nav-item">Shop</a>
+        {% if current_user.is_authenticated %}
+          <span class="nav-item">Hi, {{ current_user.email }}</span>
+          <a href="{{ url_for('logout') }}" class="nav-item btn-primary">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="nav-item btn-primary">Login</a>
+        {% endif %}
+        <button id="darkModeToggle" class="nav-item" onclick="toggleDarkMode()">
+          <i class="{% if session.get('dark_mode') %}fas fa-sun{% else %}fas fa-moon{% endif %}"></i>
+        </button>
+      </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="hero-content-extreme">
+    <h1 class="hero-title">Welcome to <span>Pet Kingdom</span></h1>
+    <p class="hero-subtitle">Premium Care for Your Furry, Feathery & Scaly Friends</p>
+    <a href="#shop" class="btn-primary hero-btn">Shop Now</a>
+  </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about" class="about-section">
+  <div class="container">
+    <h2 class="section-title">Why Choose Pet Kingdom?</h2>
+    <div class="about-grid">
+      <div class="about-card">
+        <i class="fas fa-shield-alt"></i>
+        <h3>Trusted Quality</h3>
+        <p>Premium products from top brands</p>
+      </div>
+      <div class="about-card">
+        <i class="fas fa-truck"></i>
+        <h3>Fast Delivery</h3>
+        <p>Free shipping on orders over $50</p>
+      </div>
+      <div class="about-card">
+        <i class="fas fa-heart"></i>
+        <h3>Pet Lovers</h3>
+        <p>Run by animal enthusiasts</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="testimonials-section">
+  <div class="container">
+    <h2 class="section-title">Happy Pet Parents</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <p>"Best pet store ever! My cat loves the new bed!"</p>
+        <strong>— Sarah M.</strong>
+      </div>
+      <div class="testimonial">
+        <p>"Fast delivery and great quality toys!"</p>
+        <strong>— John D.</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP SECTION -->
+<section id="shop" class="shop-section">
+  <div class="container">
+    <h2 class="section-title">Our Shop</h2>
+    <p class="section-subtitle">Browse premium pet products. Login to purchase!</p>
+    <div class="shop-grid">
+      {% for product in products %}
+        <div class="product-item">
+          <img src="{{ product.image }}" alt="{{ product.name }}">
+          <h3>{{ product.name }}</h3>
+          <p class="price">${{ "%.2f"|format(product.price) }}</p>
+          {% if current_user.is_authenticated %}
+            <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+              <button type="submit" class="btn-primary">Add to Cart</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('login') }}" class="btn-primary">Login to Buy</a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    {% if current_user.is_authenticated %}
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="{{ url_for('cart') }}" class="btn-secondary">View Cart</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <h4>About Us</h4>
+      <p>Pet Kingdom is your one-stop shop for all pet needs.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Links</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#shop">Shop</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Social</h4>
+      <div class="social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Pet Kingdom. All rights reserved.
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<!-- Dark Mode Toggle Script -->
+<script>
+function toggleDarkMode() {
+  const html = document.documentElement;
+  const isDark = html.classList.toggle('dark-mode');
+  const icon = document.querySelector('#darkModeToggle i');
+  icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+  fetch('/toggle_dark_mode', { method: 'POST' });
+}
+</script>
+
+<!-- Smooth Scroll for #shop -->
+{% if request.args.get('scroll_to') %}
+<script>
+  document.getElementById('{{ request.args.get('scroll_to') }}').scrollIntoView({ behavior: 'smooth' });
+</script>
+{% endif %}
+
+</body>
+</html>

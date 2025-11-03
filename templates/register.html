@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register | Pet Kingdom</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='login-styles.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body class="login-body">
+
+<video autoplay muted loop playsinline class="login-video" loading="lazy">
+  <source src="https://cdn.pixabay.com/video/2018/03/31/15305-262921865_large.mp4" type="video/mp4">
+</video>
+
+<div class="login-overlay"></div>
+
+<div class="login-container">
+  <div class="login-card">
+    <h1>Create Your <span class="highlight">Kingdom</span></h1>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="login-form">
+      <div class="input-wrapper">
+        <i class="fas fa-envelope"></i>
+        <input type="email" name="email" placeholder="Email" required />
+      </div>
+      <div class="input-wrapper">
+        <i class="fas fa-lock"></i>
+        <input type="password" name="password" placeholder="Password" required />
+      </div>
+      <button type="submit" class="btn-login">
+        <span class="btn-text">Register</span>
+        <div class="spinner" style="display:none;"></div>
+      </button>
+    </form>
+
+    <p class="signup-text">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+  </div>
+</div>
+
+<script>
+  document.querySelector('.login-form').addEventListener('submit', function(e) {
+    const btn = this.querySelector('.btn-login');
+    const text = btn.querySelector('.btn-text');
+    const spinner = btn.querySelector('.spinner');
+    
+    text.style.opacity = '0';
+    spinner.style.display = 'block';
+    btn.disabled = true;
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+/* ====================== LOGIN PAGE ====================== */
+.login-body {
+  margin: 0; padding: 0; height: 100vh; overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+  display: flex; justify-content: center; align-items: center;
+}
+
+.login-video {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;
+}
+
+.login-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(77,168,218,0.5)); z-index: 2;
+}
+
+.login-container {
+  position: relative; z-index: 3; width: 90%; max-width: 420px; padding: 2rem;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 2.5rem;
+  border-radius: 25px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+  text-align: center;
+  animation: floatIn 0.8s ease;
+}
+
+.login-card h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+.highlight { color: #4da8da; }
+
+/* ====================== INPUTS WITH ICON INSIDE ====================== */
+.input-wrapper {
+  position: relative;
+  margin-bottom: 1.2rem;
+}
+.input-wrapper i {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4da8da;
+  font-size: 1.1rem;
+  z-index: 1;
+}
+.input-wrapper input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 50px;
+  font-size: 1rem;
+  background: #fff;
+  transition: all 0.3s ease;
+  color: #333;
+}
+.input-wrapper input:focus {
+  outline: none;
+  border-color: #4da8da;
+  box-shadow: 0 0 0 4px rgba(77,168,218,0.2);
+}
+.input-wrapper input::placeholder {
+  color: #aaa;
+}
+
+/* ====================== FORM OPTIONS ====================== */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+.form-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.forgot-link, .signup-text a {
+  color: #4da8da;
+  text-decoration: none;
+}
+.forgot-link:hover, .signup-text a:hover {
+  text-decoration: underline;
+}
+
+/* ====================== BUTTONS ====================== */
+.btn-login {
+  width: 100%;
+  background: linear-gradient(45deg, #4da8da, #6ee2f5);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  position: relative;
+  transition: 0.4s;
+  margin-bottom: 1rem;
+}
+.btn-login:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(77,168,218,0.4);
+}
+
+.spinner {
+  width: 22px; height: 22px;
+  border: 3px solid #fff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Divider */
+.divider {
+  position: relative;
+  margin: 1.5rem 0;
+  color: #aaa;
+}
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 0;
+  width: 100%; height: 1px;
+  background: #ddd;
+}
+.divider span {
+  background: rgba(255,255,255,0.95);
+  padding: 0 1rem;
+}
+
+/* Google Button */
+.btn-google {
+  width: 100%;
+  background: #fff;
+  color: #333;
+  border: 2px solid #ddd;
+  padding: 0.9rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transition: 0.3s;
+}
+.btn-google img { width: 18px; }
+.btn-google:hover {
+  border-color: #4da8da;
+  background: #f8f9fa;
+}
+
+/* Signup Text */
+.signup-text {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Animations */
+@keyframes floatIn {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Mobile */
+@media (max-width: 480px) {
+  .login-card { padding: 2rem; }
+  .login-card h1 { font-size: 1.8rem; }
+}

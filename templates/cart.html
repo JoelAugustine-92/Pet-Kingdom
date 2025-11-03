@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" {% if session.get('dark_mode') %}class="dark-mode"{% endif %}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart | Pet Kingdom</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- Navbar (Copy from index.html for consistency) -->
+<header class="navbar-on-video">
+  <div class="container nav-container">
+    <a href="{{ url_for('home') }}" class="logo"><i class="fas fa-crown"></i> Pet Kingdom</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home" class="nav-item">Home</a>
+      <a href="#about" class="nav-item">About</a>
+      <a href="#testimonials" class="nav-item">Testimonials</a>
+      <a href="#shop" class="nav-item">Shop</a>
+      {% if current_user.is_authenticated %}
+        <span class="nav-item">Welcome, {{ current_user.email }}</span>
+        <a href="{{ url_for('logout') }}" class="nav-item btn-primary">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="nav-item btn-primary">Login</a>
+      {% endif %}
+      <button id="darkModeToggle" class="nav-item" onclick="toggleDarkMode()">
+        <i class="{% if session.get('dark_mode') %}fas fa-sun{% else %}fas fa-moon{% endif %}"></i>
+      </button>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</header>
+
+<!-- Cart Content -->
+<section class="cart-section">
+  <div class="container">
+    <h2 class="section-title">Your Cart</h2>
+    {% if cart_items %}
+      <div class="cart-grid">
+        {% for item in cart_items %}
+          <div class="cart-item">
+            <img src="{{ item.image }}" alt="{{ item.name }}">
+            <h3>{{ item.name }}</h3>
+            <p class="price">${{ item.price }}</p>
+            <form method="POST" action="{{ url_for('remove_from_cart', product_id=item.id) }}">
+              <button type="submit" class="btn-secondary">Remove</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+      <p class="total">Total: ${{ total }}</p>
+      <a href="{{ url_for('checkout') }}" class="btn-primary">Checkout</a>
+    {% else %}
+      <p>Your cart is empty. <a href="#shop">Go shopping!</a></p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Dark Mode Script -->
+<script>
+function toggleDarkMode() {
+  const html = document.documentElement;
+  const isDark = html.classList.toggle('dark-mode');
+  const icon = document.querySelector('#darkModeToggle i');
+  
+  icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+
+  fetch('/toggle_dark_mode', { method: 'POST' })
+    .catch(() => console.error('Dark mode sync failed'));
+}
+</script>
+
+</body>
+</html>
